@@ -1,4 +1,4 @@
-require "thinking_sphinx"
+#require "thinking_sphinx"
 require "resque"
 
 module AssetHostCore
@@ -29,7 +29,7 @@ module AssetHostCore
       ::Paperclip.register_processor :asset_thumbnail, ::Paperclip::AssetThumbnail
       
       # work around an issue where TS isn't seeing model directories if Rails hasn't appended the trailing slash
-      ::ThinkingSphinx::Configuration.instance.model_directories << File.expand_path("../../../app/models",__FILE__) + "/"
+      #::ThinkingSphinx::Configuration.instance.model_directories << File.expand_path("../../../app/models",__FILE__) + "/"
       
       # set our resque job's queue
       AssetHostCore::ResqueJob.instance_variable_set :@queue, Rails.application.config.assethost.resque_queue || "assethost"    

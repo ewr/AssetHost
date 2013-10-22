@@ -45,11 +45,11 @@ module AssetHostCore
           # the file may still not have been written yet. loop a try to return it
         
           (0..5).each do 
-            if @asset.image.exists? style.code_sym
+            if @asset.image.exists? style.code.to_s
               # got it.  cache and return
               
               path = @asset.image.path(style.code)
-              Rails.logger.debug("PublicController cache_img_path for #{@asset.id}/#{style.code_sym} got #{path}")
+              Rails.logger.debug("PublicController cache_img_path for #{@asset.id}/#{style.code.to_s} got #{path}")
               Rails.cache.write("img:#{@asset.id}:#{@asset.image_fingerprint}:#{style.code}",path)
               
               send_file path, :type => "image/jpeg", :disposition => 'inline' and return

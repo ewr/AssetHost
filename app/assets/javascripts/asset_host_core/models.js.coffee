@@ -189,7 +189,7 @@ class AssetHost.Models
             # make sure all of our view elements are added
             $(@el).append( _(@_views).map (v) -> v.el )
 
-            $( @el ).sortable
+            $( @el ).sortable?(
                 update: (evt,ui) => 
                     _(@el.children).each (li,idx) => 
                         id = $(li).attr('data-asset-id')
@@ -197,6 +197,7 @@ class AssetHost.Models
                         console.log("set idx for #{id} to #{idx}")
                         
                     @collection.sort()
+            )
 
             @
         

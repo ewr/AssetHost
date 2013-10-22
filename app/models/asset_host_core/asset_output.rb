@@ -62,7 +62,7 @@ module AssetHostCore
       # -- in with the new -- #
       path = self.asset.image.path(self)
       
-      Rails.logger.debug("AssetOutput cache_img_path for #{self.asset.id}/#{self.output.code_sym} got #{path}")
+      Rails.logger.debug("AssetOutput cache_img_path for #{self.asset.id}/#{self.output.code.to_s} got #{path}")
       
       if path && File.exists?(path)
         Rails.cache.write("img:"+[self.asset.id,self.image_fingerprint,self.output.code].join(":"),path)

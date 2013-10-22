@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 3.2.1"
-  s.add_dependency "paperclip"
+  s.add_dependency "paperclip", "~> 3.4.0"
   s.add_dependency "brightcove-api"
   s.add_dependency "will_paginate"
   s.add_dependency "thinking-sphinx"

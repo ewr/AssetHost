@@ -1,5 +1,6 @@
 #= require asset_host_core/assethost
 #= require asset_host_core/models
+#= require asset_host_core/chooserui
 
 class AssetHost.railsCMS
     DefaultOptions:

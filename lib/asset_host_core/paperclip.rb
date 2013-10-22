@@ -79,7 +79,7 @@ module AssetHostCore
       instance = instance_klass.constantize.find(instance_id)
       
       if style_args
-        style_args.collect! { |s| s.to_sym }
+        style_args.collect! { |s| s.to_s }
       end
       
       instance.send(attachment_name)._process!(*style_args)
@@ -141,8 +141,8 @@ module Paperclip
     def enqueue
       # queue up any outputs that a) already exist or b) are set to prerender
       styles = [
-        AssetHostCore::Output.where(:prerender => true).collect(&:code_sym),
-        self.instance.outputs.collect { |ao| ao.output.code_sym }
+        AssetHostCore::Output.where(:prerender => true).collect(&:code),
+        self.instance.outputs.collect { |ao| ao.output.code.to_s }
       ].flatten.uniq
       
       Resque.enqueue(AssetHostCore::ResqueJob,self.instance.class.name,self.instance.id,self.name,*styles)
@@ -258,7 +258,7 @@ module Paperclip
     #----------
 
     def tag(style = default_style,args={})
-      s = self.styles[style.to_sym]
+      s = self.styles[style.to_s]
 
       if !s
         return nil
@@ -342,7 +342,7 @@ module Paperclip
       super
 
       @convert_options = [ 
-        "-gravity #{ @asset.image_gravity? ? @asset.image_gravity : "Center" }", "-strip", "-quality 80", @convert_options 
+        "-gravity #{ @asset.image_gravity? ? @asset.image_gravity : "Center" }", "-strip", "-quality 90", @convert_options 
       ].flatten.compact
 
       Paperclip.log("[ewr] Convert options are #{@convert_options}")
@@ -366,15 +366,15 @@ module Paperclip
 
         if @size =~ /(\d+)?x?(\d+)?([\#>])?$/ && $~[3] == "#"
           # crop...  scale using dimensions as minimums, then crop to dimensions
-          scale = "-scale #{$~[1]}x#{$~[2]}^"
+          scale = "-distort resize #{$~[1]}x#{$~[2]}^"
           crop = "-crop #{$~[1]}x#{$~[2]}+0+0"
 
-          @convert_options = [@convert_options.shift,scale,crop,@convert_options].flatten
+          @convert_options = [@convert_options.shift,"-filter catrom",scale,crop,@convert_options].flatten
         else
           # don't crop
-          scale = "-scale '#{$~[1]}x#{$~[2]}#{$~[3]}'"
+          scale = "-distort resize '#{$~[1]}x#{$~[2]}#{$~[3]}'"
           Paperclip.log("[ewr] calling scale of #{scale}")
-          @convert_options = [scale,@convert_options].flatten
+          @convert_options = ["-filter lanczos2sharp",scale,@convert_options].flatten
         end
 
         Paperclip.log("[ewr] Final convert_options are #{@convert_options}")

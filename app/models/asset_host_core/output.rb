@@ -26,7 +26,7 @@ module AssetHostCore
     #----------
 
     def paperclip_options
-      { self.code.to_sym => { :geometry => '', :size => self.size, :format => self.extension.to_sym, :prerender => self.prerender, :output => self.id, :rich => self.is_rich } }
+      { self.code.to_s => { :geometry => '', :size => self.size, :format => self.extension.to_sym, :prerender => self.prerender, :output => self.id, :rich => self.is_rich } }
     end
     
     #----------

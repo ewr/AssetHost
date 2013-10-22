@@ -7,16 +7,6 @@ module AssetHostCore
     VIA_LOCAL = 2
     VIA_UPLOAD = 3
 
-  	define_index do
-      indexes title
-      indexes caption
-      indexes notes
-      indexes owner
-      has created_at
-      has updated_at
-      where "is_hidden = 0"
-    end
-
     GRAVITY_OPTIONS = [
       [ "Center (default)", "Center"    ],
       [ "Top",              "North"     ],
@@ -262,7 +252,7 @@ module AssetHostCore
       @output = output
       
       [:width,:height,:tag,:url].each do |a|
-        self.send("#{a}=",@asset.image.send(a,output.code_sym))
+        self.send("#{a}=",@asset.image.send(a,output.code.to_s))
       end
     end
   end

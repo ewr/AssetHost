@@ -52,20 +52,16 @@ class AssetHost.Models
 
         
     @PaginatedAssets: @Assets.extend
-        initialize: ->
-            _.bindAll(this, 'parse','url')
-            
-            typeof(options) != 'undefined' || (options = {});
+        initialize: (options) ->
             @_page = 1;
             @_query = ''
             @per_page = 24
             @total_entries = 0
-            
-            this
         
-        parse: (resp,xhr) ->
-            @next_page = xhr.getResponseHeader('X-Next-Page')
-            @total_entries = xhr.getResponseHeader('X-Total-Entries')
+        parse: (resp,options) ->
+            console.log("resp is ", resp, options)
+            @next_page = options?.xhr?.getResponseHeader('X-Next-Page')
+            @total_entries = options?.xhr?.getResponseHeader('X-Total-Entries')
             console.log "Next page for assets is #{@next_page}"
             
             resp
@@ -101,7 +97,7 @@ class AssetHost.Models
         
         #----------
             
-        initialize: ->
+        initialize: (@options) ->
             @del_confirm = false
             @del_timeout = null
             
@@ -276,7 +272,9 @@ class AssetHost.Models
         
         initialize: ->
             @_views = {}
+            console.log "ABV binding to ", @collection
             @collection.bind "reset", => 
+                console.log "in ABV reset"
                 _(@_views).each (a) => $(a.el).detach()
                 @_views = {}
                 @render()

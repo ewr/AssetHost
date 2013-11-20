@@ -96,7 +96,7 @@ class AssetHost.BrowserUI
             # fire off AJAX API request
             @assets.query(options['query'])
             @assets.page(options['page'])
-            @assets.fetch()
+            @assets.fetch reset:true
         
             return false
                 

@@ -374,7 +374,7 @@ module Paperclip
           # don't crop
           scale = "-distort resize '#{$~[1]}x#{$~[2]}#{$~[3]}'"
           Paperclip.log("[ewr] calling scale of #{scale}")
-          @convert_options = [scale,@convert_options].flatten
+          @convert_options = ["-filter lanczos2sharp",scale,@convert_options].flatten
         end
 
         Paperclip.log("[ewr] Final convert_options are #{@convert_options}")

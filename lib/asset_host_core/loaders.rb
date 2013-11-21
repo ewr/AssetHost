@@ -26,7 +26,7 @@ module AssetHostCore::Loaders
       AssetHostCore::Loaders.discovered << subclass
       
       # make sure we stay sorted while loading
-      AssetHostCore::Loaders.discovered.sort_by { |c| c.name.split("::")[-1] }
+      AssetHostCore::Loaders.discovered.sort_by! { |c| c.name.split("::")[-1] }
     end    
   end
 end

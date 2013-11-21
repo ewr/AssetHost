@@ -25,7 +25,8 @@ class AssetHost.railsCMS
         $(@options.el).html @assetsView.el
                 
         window.addEventListener "message", (evt) => 
-            if evt.data != "LOADED"
+            console.log "Got window message with ", evt
+            if evt.data != "LOADED" && evt.origin == AssetHost.SERVER
                 console.log "got reply of ", evt
                 
                 found = {}
@@ -103,7 +104,7 @@ class AssetHost.railsCMS
             tagName: "ul"
             events: { "click button": "_popup" }
             
-            initialize: ->
+            initialize: (@options) ->
                 @_views = {}
                 @collection.bind "reset", => 
                     _(@_views).each (a) => $(a.el).detach(); @_views = {}

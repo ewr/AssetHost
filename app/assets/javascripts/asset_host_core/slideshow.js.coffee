@@ -88,7 +88,7 @@ class AssetHost.Slideshow
             
             #----------
                 
-            initialize: ->
+            initialize: (@options) ->
                 @slides = @options.slides
                 @hidden = @options.hidden
                 @index = @options.index
@@ -180,8 +180,8 @@ class AssetHost.Slideshow
                                   
                     # -- center -- #
                     
-                    @imgDiv.css "margin-left", ($(@el).width() - (@imgSize.width * @scale))/2
-                    @imgDiv.css "margin-top", (@imgHeight - (@imgSize.height * @scale))/2
+                    @imgDiv.css "margin-left", ($(@el).width() - (@imgSize.width * @scale)) / 2
+                    @imgDiv.css "margin-top", (@imgHeight - (@imgSize.height * @scale)) / 2
                     
                     # -- add to our element -- #
                     
@@ -204,7 +204,7 @@ class AssetHost.Slideshow
                 'mouseover': '_mouseover'
                 'mouseout': '_mouseout'
 
-            initialize: ->
+            initialize: (@options) ->
                 @hidden = @options.hidden
                 @slides = []
                 
@@ -390,7 +390,7 @@ class AssetHost.Slideshow
               
             #----------
             
-            initialize: ->
+            initialize: (@options) ->
                 @total = @options.total
                 @current = Number(@options.current) + 1
                 

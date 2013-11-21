@@ -151,7 +151,7 @@ class AssetHost.Models
         tagName: "ul"
         className: "assets"
             
-        initialize: ->
+        initialize: (@options) ->
             @_views = {}
 
             @collection.bind 'add', (f) => 
@@ -212,7 +212,7 @@ class AssetHost.Models
             'click button': 'search',
             'keypress input:text': '_keypress'
 
-        initialize: ->
+        initialize: (@options) ->
             @collection.bind('all', => @render() )
                     
         _keypress: (e) ->
@@ -244,7 +244,7 @@ class AssetHost.Models
     		<br/><%= size %>                
             '''
             
-        initialize: ->
+        initialize: (@options) ->
             @id = "ab_#{@model.get('id')}"
             $(@el).attr("data-asset-url",@model.get('url'))
 
@@ -270,17 +270,15 @@ class AssetHost.Models
     @AssetBrowserView: Backbone.View.extend
         tagName: "ul"
         
-        initialize: ->
+        initialize: (@options) ->
             @_views = {}
-            console.log "ABV binding to ", @collection
             @collection.bind "reset", => 
-                console.log "in ABV reset"
                 _(@_views).each (a) => $(a.el).detach()
                 @_views = {}
                 @render()
                         
         pages: ->
-            @_pages ?= (new AssetHost.Models.PaginationLinks(@collection)).render()
+            @_pages ?= (new AssetHost.Models.PaginationLinks(collection:@collection)).render()
             
         loading: ->
             $(@el).fadeOut()
@@ -327,8 +325,7 @@ class AssetHost.Models
             </div>
             '''
 
-        open: (options) ->
-            @options = options || {}
+        open: (@options) ->
             console.log "modal options is ", @options
                         
             $(@render().el).modal()
@@ -357,10 +354,7 @@ class AssetHost.Models
     
     @SaveAndCloseView: Backbone.View.extend
         events: { 'click button': 'saveAndClose' }
-        initialize: ->
-            @collection.bind "all", => @render()                
-            @render()
-        
+
         template:
             '''
             <button id="saveAndClose" class="btn btn-large btn-primary">
@@ -368,6 +362,10 @@ class AssetHost.Models
                 <% if (count) { %>(<%= count %> Assets)<% } %>
             </button>
             '''
+
+        initialize: (@options) ->
+            @collection.bind "all", => @render()                
+            @render()
         
         saveAndClose: ->
             console.log "saveAndClose Clicked with ",@collection
@@ -395,10 +393,9 @@ class AssetHost.Models
         
         events: { 'click li': 'clickPage' }
         
-        initialize: (collection,options = {}) ->
+        initialize: (options) ->
             @options = _.defaults options, @DefaultOptions
 
-            @collection = collection
             @collection.bind("reset", => @render() )
             @collection.bind("add", => @render() )
             @collection.bind("change", => @render() )
@@ -504,7 +501,7 @@ class AssetHost.Models
 
             $(@xhr.upload).bind "progress", (evt) => 
                 evt = evt.originalEvent
-                @set {"PERCENT": if evt.lengthComputable then Math.floor(evt.loaded/evt.total*100) else evt.loaded}
+                @set {"PERCENT": if evt.lengthComputable then Math.floor(evt.loaded / evt.total*100) else evt.loaded}
 
             $(@xhr.upload).bind "complete", (evt) =>
                 @set {"STATUS": "pending"} 
@@ -547,8 +544,8 @@ class AssetHost.Models
         model: @QueuedFile
         urlRoot: "#{AssetHost.PATH_PREFIX}/a/assets/upload"
         
-        initialize: (models,options) ->
-            @urlRoot = options.urlRoot
+        initialize: (models,@options) ->
+            @urlRoot = @options.urlRoot
 
     #----------
 
